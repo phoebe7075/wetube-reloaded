@@ -8,8 +8,12 @@ const handleHome = (req, res) => {
     return res.send("It is end");
 };
 
-app.get("/", handleHome);
+const handleLogin = (req, res) => {
+    return res.send("Login success.");
+};
 
+app.get("/", handleHome);
+app.get("/login", handleLogin);
 
 const handleListening = () => 
     console.log(`Server Listening on port http://localhost:${PORT}.`);
