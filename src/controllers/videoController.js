@@ -1,11 +1,9 @@
-export const trending = (req, res) => res.send("Home Page Videos");
+export const trending = (req, res) => res.render("home"); //pug 파일을 렌더하게 함. 5.1
 export const see = (req, res) => {
-    console.log(req.params);
-    return res.send("Watch");
+    return res.render("watch");
 };
 export const edit = (req, res) => {
-    console.log(req.params);
-    return res.send("Edit");
+    return res.render("edit");
 };
 export const search = (req, res) => res.send("Search");
 export const upload = (req, res) => res.send("upload");
