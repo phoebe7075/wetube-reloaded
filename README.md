@@ -10,10 +10,10 @@
 
 - /users/edit : Edit user
 
-- /users/delete : Delete user
+- /users/remove : remove user
 
 - /videos/watch : Watch Video
 
 - /videos/edit : edit Video
 
-- /videos/delete : delete Video
+- /videos/remove : remove Video
