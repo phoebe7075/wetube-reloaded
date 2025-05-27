@@ -1,4 +1,4 @@
-#Wetube Reloaded
+# Wetube Reloaded
 
 - / : Home
 
@@ -6,11 +6,11 @@
 
 - /login : Log in
 
-- /search : Search<br>
+- /search : Search
 
 - /users/edit : Edit user
 
-- /users/delete : Delete user<br>
+- /users/delete : Delete user
 
 - /videos/watch : Watch Video
 
