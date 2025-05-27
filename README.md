@@ -8,12 +8,12 @@
 
 - /search : Search
 
-- /users/edit : Edit user
+- /users/:id : See user profile
+- /users/logout : Log Out
+- /users/edit : Edit My Profile
+- /users/remove : remove My Profile
 
-- /users/remove : remove user
-
-- /videos/watch : Watch Video
-
-- /videos/edit : edit Video
-
-- /videos/remove : remove Video
+- /videos/:id : Watch Video
+- /videos/:id/edit : edit Video
+- /videos/:id/remove : remove Video
+- /videos/upload : upload video
