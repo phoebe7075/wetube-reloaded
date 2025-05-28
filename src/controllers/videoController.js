@@ -1,9 +1,9 @@
-export const trending = (req, res) => res.render("home"); //pug 파일을 렌더하게 함. 5.1
+export const trending = (req, res) => res.render("home", {pageTitle : "Home"}); //pug 파일을 렌더하게 함. 5.1
 export const see = (req, res) => {
-    return res.render("watch");
+    return res.render("watch", {pageTitle : "Watch"});
 };
 export const edit = (req, res) => {
-    return res.render("edit");
+    return res.render("edit", {pageTitle : "Edit"});
 };
 export const search = (req, res) => res.send("Search");
 export const upload = (req, res) => res.send("upload");
