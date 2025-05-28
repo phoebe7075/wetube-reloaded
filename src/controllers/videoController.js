@@ -1,4 +1,10 @@
-export const trending = (req, res) => res.render("home", {pageTitle : "Home"}); //pug 파일을 렌더하게 함. 5.1
+const fakeUser = {
+    username:"phoebe7075",
+    loggedIn: true,
+}
+
+
+export const trending = (req, res) => res.render("home", {pageTitle : "Home", fakeUser: fakeUser}); //pug 파일을 렌더하게 함. 5.1
 export const see = (req, res) => {
     return res.render("watch", {pageTitle : "Watch"});
 };
