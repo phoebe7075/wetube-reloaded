@@ -28,15 +28,10 @@
 
 ```
 "dependencies": {
-    "express": "^5.1.0",
-    "morgan": "^1.10.0",
-    "pug": "^3.0.3"
+    ...
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
-    "@babel/node": "^7.27.1",
-    "@babel/preset-env": "^7.27.2",
-    "nodemon": "^3.1.10"
+    ...
   },
   "overrides": {
     "path-to-regexp" : "6.3.0"
@@ -63,3 +58,12 @@ const validateNumericId = (req, res, next) => {
 ```
 
 - 와 같은 미들웨어를 사용해서 검사를 해야함. 이 경우는 순서를 지키는 과정은 필수이기 때문에 파라미터를 쓰지 않는 라우터들을 위로 올려야 한다.
+
+## Stack
+
+- express: "^5.1.0"
+- morgan: "^1.10.0"
+- pug: "^3.0.3"
+- nodejs: "^22.16.0"
+- babel: "^7.27.1"
+  - nodemon: "^3.1.10"

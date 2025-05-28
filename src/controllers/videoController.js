@@ -1,8 +1,32 @@
 
 export const trending = (req, res) => {
-    const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const videos2 = [];
-    return res.render("home", {pageTitle : "Home", videos2});
+    const videos = [
+        {
+            title: "First Video",
+            rating:5,
+            comments:2,
+            createdAt: "2 minutes ago",
+            views: 59,
+            id: 1,
+        },
+        {
+            title: "Second Video",
+            rating:4.5,
+            comments:1,
+            createdAt: "1 minutes ago",
+            views: 51,
+            id: 2,
+        },
+        {
+            title: "Third Video",
+            rating:5,
+            comments:0,
+            createdAt: "0 minutes ago",
+            views: 45,
+            id: 3,
+        }
+    ];
+    return res.render("home", {pageTitle : "Home", videos});
  } //pug 파일을 렌더하게 함. 5.1
 export const see = (req, res) => {
     return res.render("watch", {pageTitle : "Watch"});
