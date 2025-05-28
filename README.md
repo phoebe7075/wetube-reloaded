@@ -18,9 +18,9 @@
 - /videos/:id/remove : remove Video
 - /videos/upload : upload video
 
-# 에러 해결 목록
+## 에러 해결 목록
 
-## path to regexp
+### path to regexp
 
 - "/:id(\\d+)" 와 같은 파라미터에 직접 regular expression을 하는 경우 에러 발생.
 - 이는 8.0.0 버전 올라가면서 보안문제 (백트래킹으로 ReDoS 공격을 할 수 있음 등)에 의해 삭제된 것으로 추측.
