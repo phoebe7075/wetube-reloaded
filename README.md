@@ -59,6 +59,26 @@ const validateNumericId = (req, res, next) => {
 
 - 와 같은 미들웨어를 사용해서 검사를 해야함. 이 경우는 순서를 지키는 과정은 필수이기 때문에 파라미터를 쓰지 않는 라우터들을 위로 올려야 한다.
 
+### mongodb 관련
+
+- 먼저 mongod 명령어 안뜨는 부분은 시스템 환경변수에 `C:\Program Files\MongoDB\Server\8.0\bin` 와 같은 경로를 추가해야 함. 그래야 실행됨
+- mongo 명령어는 mongosh로 대체됨 (6버전 이상 부터). 그래서 mongosh (mongo shell) 을 따로 설치해야 mongosh 명령어가 작동할 것.
+- wsl에서는 연결을 하려면 먼저 window cmd 등에서 ipconfig로 wsl의 로컬 ip를 찾아서 복사해두고 mongod 경로에 있는 mongod.cfg 안에
+  ```# network interfaces
+  net:
+    port: 27017
+    bindIp: 127.0.0.1, 172.27.96.1
+  ```
+  이렇게 추가를 해줘야 함(관리자 권한으로 메모장 실행하고 수정해야 적용가능)
+  그 다음 윈도우 방화벽에서 새 규칙 추가 - 포트 - 27017 추가 하여야 함.
+  그 다음 실제 코드 상에서도 wsl을 통해 접속하므로 wsl 로컬 ip로 수정해야 될 것.
+- 만약 wsl에서 window로 포트가 정상적으로 연결되는지 테스트를 해보고싶다면 `telnet 172.27.96.1 27017` 으로 해보면 된다. 종료하려면 `ctrl + ]` 를 하거나, `telnet>` 이렇게 뜰 경우 quit 입력하면 연결 종료.
+- 이런식으로 mongod.cfg를 수정했다면 보통 그냥 상태에선 서비스 등록이 안되있어서 mongod 실행 시 그냥 기본상태로 실행하려고만 함. 그래서 서비스 등록을 통해 자동으로 --config 뒤의 내용을 실행하게끔 해야 한다. 그건 powershell 관리자 권한 실행해서
+  ```
+  mongod.exe --config "C:\Program Files\MongoDB\Server\8.0\bin\mongod.cfg" --install --serviceName "MongoDB" --serviceDisplayName "MongoDB Server"
+  ```
+  를 하면 됨. 그 뒤에 powershell 관리자권한으로 `net start MongoDB` 해주면 된다.
+
 ## 팁
 
 ### pug
@@ -73,3 +93,5 @@ const validateNumericId = (req, res, next) => {
 - nodejs: "^22.16.0"
 - babel: "^7.27.1"
   - nodemon: "^3.1.10"
+- MongoDB: "8.0.9"
+- Mongoose: "8.15.1"
