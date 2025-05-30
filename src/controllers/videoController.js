@@ -38,22 +38,24 @@ export const postUpload = async (req, res) => {
     // here we will add a video to the videos array.
     const { title, description, hashtags } = req.body
 
-    await Video.create({
-        title,
-        description,
-        createdAt: Date.now(),
-        hashtags: hashtags.split(",").map(tag => {
-            const tagWithoutHashes = tag.replaceAll("#", "");
+    try {
+        await Video.create({
+            title,
+            description,
+            hashtags: hashtags.split(",").map(tag => {
+                const tagWithoutHashes = tag.replaceAll("#", "");
 
-            const trimmedTag = tagWithoutHashes.trim();
-            return trimmedTag;
-        })
-        .filter(tag => tag !== "")
-        .map(tag => `#${tag}`),
-        meta: {
-            views: 0,
-            rating: 0,
-        },
-    });
-    return res.redirect("/")
+                const trimmedTag = tagWithoutHashes.trim();
+                return trimmedTag;
+            })
+            .filter(tag => tag !== "")
+            .map(tag => `#${tag}`),
+        });
+        return res.redirect("/")
+    } catch(err) {
+        return res.render("upload", {
+            pageTitle: "Upload Video",
+            errorMessage: err._message,
+        });
+    }
 }
