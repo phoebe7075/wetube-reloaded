@@ -10,10 +10,13 @@ export const home = async (req, res) => {
     }
     
  }
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
     const { id } = req.params;
     
-    return res.render("watch", {pageTitle : `Watch `});
+    const videoItem = await Video.findById(id)
+    return res.render("watch", {pageTitle : videoItem.title, video: videoItem});
+    
+    
 };
 export const getEdit = (req, res) => {
     const { id } = req.params;
