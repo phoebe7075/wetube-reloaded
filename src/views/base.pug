@@ -6,6 +6,12 @@ html(lang="ko")
     body 
         header 
             h1=pageTitle /* 다른 text와 같이 쓰지 않으면 이런식으로 표현 가능 */
+            nav 
+                ul 
+                    li 
+                        a(href="videos/upload") Upload Video
+                    li 
+                        a(href="/") go Back Home
         main 
             block content
     include partials/footer.pug
