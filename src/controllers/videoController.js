@@ -40,10 +40,8 @@ export const postEdit = async (req, res) => {
     }
     await Video.findByIdAndUpdate(id, {
         title,
-        description, 
-        hashtags: hashtags.split(",").map(tag => tag.trim())
-                    .filter(tag => tag !== "")
-                    .map(tag => tag.startsWith("#") ? tag : `#${tag}`),
+        description,
+        hashtags: Video.formatHashtags(hashtags),
     });
 
     return res.redirect(`/videos/${id}`);
@@ -61,14 +59,7 @@ export const postUpload = async (req, res) => {
         await Video.create({
             title,
             description,
-            hashtags: hashtags.split(",").map(tag => {
-                const tagWithoutHashes = tag.replaceAll("#", "");
-
-                const trimmedTag = tagWithoutHashes.trim();
-                return trimmedTag;
-            })
-            .filter(tag => tag !== "")
-            .map(tag => `#${tag}`),
+            hashtags: Video.formatHashtags(hashtags),
         });
         return res.redirect("/")
     } catch(err) {
