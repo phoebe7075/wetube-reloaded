@@ -3,7 +3,7 @@ import Video from "../models/Video";
 
 export const home = async (req, res) => {
     try {
-        const videos = await Video.find({}); //db에서 결과를 받을때까지 대기
+        const videos = await Video.find({}).sort({createdAt:"desc"}); //db에서 결과를 받을때까지 대기
         return res.render("home", {pageTitle : "Home", videos});
     } catch {
         return res.render("server-error");
@@ -75,4 +75,13 @@ export const deleteVideo = async (req, res) => {
 
     await Video.findByIdAndDelete(id);
     return res.redirect("/");
+}
+
+export const search = (req, res) => {
+    const {keyword} = req.query;
+    if(keyword) {
+        console.log("should search for ", keyword);
+    }
+    
+    return res.render("search", {pageTitle:"Search"});
 }
