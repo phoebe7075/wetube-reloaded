@@ -95,3 +95,4 @@ const validateNumericId = (req, res, next) => {
   - nodemon: "^3.1.10"
 - MongoDB: "8.0.9"
 - Mongoose: "8.15.1"
+- bcrypt: "6.0.0"
