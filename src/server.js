@@ -25,6 +25,7 @@ app.use(session({
 }));
 
 app.use((req, res, next)=> {
+    res.locals.siteName = "Wetube";
     req.sessionStore.all((error, sessions) => {
         console.log(sessions);
         next();

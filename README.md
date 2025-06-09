@@ -85,6 +85,8 @@ const validateNumericId = (req, res, next) => {
 
 - 페이지 구성 시 href 등으로 링크를 작성할 때 `"/aaa/bbb"`와 같이 앞에 /를 붙이면 현재 루트 경로에서 바로 시작하게 되는, 즉 /aaa/bbb 라는 경로를 갖게 된다. 반대로 `"aaa/bbb"` 로 사용하게 된다면 현재 페이지의 링크에서 해당하는 경로가 더 붙는 상대경로로 가게 된다. 즉 /xxx/yyy/aaa/bbb 와 같이 됨.
 
+- 서버에서 템플릿으로 특정한 리소스를 공유하고 싶을 땐, res 객체 내에 locals 라는 부분을 사용하면 된다. 이 부분에 리소스를 저장하면 템플릿에서 접근이 가능함. 심지어 locals.xxx 이런식도 아니고 그냥 변수명만 적으면 된다. `locals.user` 로 저장 시 pug 내에선 user.xxx 로 원하는 변수를 불러오면 되는 것.
+
 ## Stack
 
 - express: "^5.1.0"
