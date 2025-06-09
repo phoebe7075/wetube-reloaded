@@ -21,8 +21,8 @@ app.use(logger);
 app.use(express.urlencoded({extended: true}))
 app.use(session({
     secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false, // false의 경우 세션을 수정하지 않은 경우엔 세션을 저장하지 않게 함 
     store: MongoStore.create({mongoUrl:"mongodb://172.27.96.1:27017/wetube"}),
 }));
 
