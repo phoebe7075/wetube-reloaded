@@ -99,3 +99,4 @@ const validateNumericId = (req, res, next) => {
 - Mongoose: "8.15.1"
 - bcrypt: "6.0.0"
 - express-session: "1.18.1"
+- connect-mongo: "5.1.0"
