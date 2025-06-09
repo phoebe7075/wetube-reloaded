@@ -57,8 +57,9 @@ export const postLogin = async (req, res) => {
             errMsg:"Password not correct. Please Retry one more.",
         });
     }
-
-    res.end();
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
 };
 
 export const edit = (req, res) => res.send("Edit User");
