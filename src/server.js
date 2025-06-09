@@ -2,6 +2,8 @@ import "./db";
 import Video from "./models/Video";
 import express from "express";
 import morgan from "morgan";
+import session from "express-session";
+
 
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
@@ -16,6 +18,11 @@ app.set("view engine", "pug"); //express에서 사용할 view engine을 pug를 �
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({extended: true}))
+app.use(session({
+    secret: "Hello!",
+    resave: true,
+    saveUninitialized: true,
+}));
 
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
