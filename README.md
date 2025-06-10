@@ -100,3 +100,4 @@ const validateNumericId = (req, res, next) => {
 - bcrypt: "6.0.0"
 - express-session: "1.18.1"
 - connect-mongo: "5.1.0"
+- dotenv: "16.5.0" (env파일을 읽어서 process.env에서 사용 가능하게 해줌)

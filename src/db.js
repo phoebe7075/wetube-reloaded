@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://172.27.96.1:27017/wetube"); // 또는 Windows 호스트 IP
+    await mongoose.connect(process.env.DB_URL); // 또는 Windows 호스트 IP
     console.log("Connected to DB");
   } catch (error) {
     console.error("DB Connection Error:", error);
