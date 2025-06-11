@@ -42,7 +42,7 @@ export const getLogin = (req, res) => res.render("login", {pageTitle:"Login"});
 export const postLogin = async (req, res) => {
     const {username, password} = req.body;
 
-    const user = await User.findOne({username});
+    const user = await User.findOne({username, socialOnly:false});
 
     if(!user) {
         return res.status(400).render("login", {
@@ -112,11 +112,29 @@ export const finishGithubLogin = async (req, res) => {
                 },
             })
         ).json();
-        const email = userEmail.find(
+        const emailOBj = userEmail.find(
             (email) => email.primary === true && email.verified === true
         );
-        if(!email) {
+        if(!emailOBj) {
             return res.redirect("/login");
+        }
+        const existingUser = await User.findOne({email: emailOBj.email});
+        if(existingUser) {
+            req.session.loggedIn = true;
+            req.session.user = existingUser;
+            return res.redirect("/");
+        }else {
+            const user = await User.create({
+                name:userData.name,
+                username:userData.login,
+                email:emailOBj.email,
+                password:"",
+                socialOnly: true,
+                location:userData.location,
+            });
+            req.session.loggedIn = true;
+            req.session.user = user;
+            return res.redirect("/");
         }
     }else {
         return res.redirect("/login");
@@ -129,3 +147,4 @@ export const remove = (req, res) => res.send("Remove User");
 
 export const logout = (req, res) => res.send("logout");
 export const see = (req, res) => res.send("See User");
+
