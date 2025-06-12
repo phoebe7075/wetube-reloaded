@@ -102,3 +102,4 @@ const validateNumericId = (req, res, next) => {
 - connect-mongo: "5.1.0"
 - dotenv: "16.5.0" (env파일을 읽어서 process.env에서 사용 가능하게 해줌)
 - node-fetch: "3.3.2" (nodejs에서 fetch 기능 사용가능하게 해줌)
+- connect-flash: "0.1.1"

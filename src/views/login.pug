@@ -3,6 +3,9 @@ extends base
 block content 
     if errMsg
         span=errMsg
+    if messages.error 
+        each msg in messages.error 
+            span=messages.error
     form(method="POST") 
         input(placeholder="Username", type="text", name="username", required)
         input(placeholder="Password", type="password", name="password", required)

@@ -21,3 +21,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
         return res.redirect("/");
     }
 }
+
+export const flashMiddleware = (req, res, next) => {
+    res.locals.messages = req.flash(); // req.flash()는 { success: [...], error: [...] } 형태의 객체를 반환
+    next();
+}

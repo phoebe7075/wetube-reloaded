@@ -134,10 +134,8 @@ export const finishGithubLogin = async (req, res) => {
             });
         }
         if(existingUserByUsername && !user) {
-            return res.status(400).render("login", {
-            pageTitle:"Login", 
-            errMsg:"Already have Same Github Username. Please Login to Password If your Account."
-        });
+            req.flash("error", `GitHub 사용자 이름('${userData.login}')이 이미 다른 이메일로 등록된 계정에서 사용 중입니다. 해당 계정으로 로그인하시거나 다른 방법을 시도해주세요.`);
+            return res.redirect("/login");
         }
         
         req.session.loggedIn = true;
@@ -145,6 +143,7 @@ export const finishGithubLogin = async (req, res) => {
 
         return res.redirect("/");
     }else {
+        req.flash("error", "GitHub 인증에 실패했습니다. 다시 시도해주세요.");
         return res.redirect("/login");
     }
 

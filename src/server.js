@@ -4,11 +4,12 @@ import express from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import flash from "connect-flash";
 
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
-import { localsMiddleware } from "./middlewares";
+import { flashMiddleware, localsMiddleware } from "./middlewares";
 
 
 const PORT = 4000;
@@ -26,8 +27,11 @@ app.use(session({
     store: MongoStore.create({mongoUrl:process.env.DB_URL}),
 }));
 
+app.use(flash());
 
 app.use(localsMiddleware);
+app.use(flashMiddleware);
+
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
