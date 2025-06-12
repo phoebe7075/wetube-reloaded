@@ -50,9 +50,9 @@ export const postLogin = async (req, res) => {
             errMsg:"An account with this username does not exists."
         });
     }
+    const checkPassword = await bcrypt.compare(password, user.password);
 
-    console.log(user.password);
-    if(!bcrypt.compare(password, user.password)) {
+    if(!checkPassword) {
         return res.status(400).render("login", {
             pageTitle:"Login",
             errMsg:"Password not correct. Please Retry one more.",
@@ -104,7 +104,7 @@ export const finishGithubLogin = async (req, res) => {
                 },
             })
         ).json();
-        console.log(userData);
+        
         const userEmail = await ( 
             await fetch(`${apiUrl}/user/emails`, {
                 headers: {
@@ -118,8 +118,11 @@ export const finishGithubLogin = async (req, res) => {
         if(!emailOBj) {
             return res.redirect("/login");
         }
+        console.log(emailOBj);
         let user = await User.findOne({email: emailOBj.email});
-        if(!user) {
+
+        const existingUserByUsername = await User.findOne({ username: userData.login });
+        if(!existingUserByUsername && !user) {
             user = await User.create({
                 name:userData.name,
                 username:userData.login,
@@ -130,8 +133,16 @@ export const finishGithubLogin = async (req, res) => {
                 avatarUrl:userData.avatarUrl,
             });
         }
+        if(existingUserByUsername && !user) {
+            return res.status(400).render("login", {
+            pageTitle:"Login", 
+            errMsg:"Already have Same Github Username. Please Login to Password If your Account."
+        });
+        }
+        
         req.session.loggedIn = true;
         req.session.user = user;
+
         return res.redirect("/");
     }else {
         return res.redirect("/login");
@@ -174,5 +185,53 @@ export const postEdit = async (req, res) => {
     return res.redirect("/users/edit");
 };
 
+export const getChangePassword = (req, res) => {
+    if(req.session.user.socialOnly) {
+        return res.redirect("/");
+    }
+    return res.render("users/change-password", {pageTitle:"Change Password"});
+}
+
+export const postChangePassword = async (req, res) => {
+    const {
+        session: {
+            user: {_id, password},
+        },
+        body: {oldPassword, newPassword, newPassword2},
+    } = req;
+    console.log(password);
+    console.log(await bcrypt.hash(oldPassword, 5));
+    const checkPassword = await bcrypt.compare(oldPassword, password);
+
+    if(!checkPassword) {
+        return res.status(400).render("users/change-password", {
+            pageTitle:"Change Password", 
+            errMsg:"Old Password not correct. Please Retry.",
+        });
+    }
+
+    if(newPassword !== newPassword2) {
+        return res.status(400).render("users/change-password", {
+                pageTitle:"Change Password", 
+                errorMessage:"Password confirmation does not match."
+            } 
+        );
+    }
+
+    if(oldPassword === newPassword) {
+        return res.status(400).render("users/change-password", {
+                pageTitle:"Change Password", 
+                errorMessage:"Old Password and New Password is same. Please Use another Password."
+            } 
+        );
+    }
+
+    
+
+    
+    await User.findByIdAndUpdate(_id, {newPassword});
+    
+    return res.redirect("/");
+}
 
 export const see = (req, res) => res.send("See User");
