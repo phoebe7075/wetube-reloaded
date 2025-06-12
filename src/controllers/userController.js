@@ -159,7 +159,11 @@ export const postEdit = async (req, res) => {
     const exists = await User.exists({$or: [{username}, {email}]});
 
     if(exists) {
-        return res.status(400).render("edit-profile", {pageTitle:"Update Profile", errorMessage:"Check Username or Email. already have an Username or Email."} )
+        return res.status(400).render("edit-profile", {
+                pageTitle:"Update Profile", 
+                errorMessage:"Check Username or Email. already have an Username or Email."
+            } 
+        )
     }
     
 
