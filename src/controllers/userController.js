@@ -116,6 +116,7 @@ export const finishGithubLogin = async (req, res) => {
             (email) => email.primary === true && email.verified === true
         );
         if(!emailOBj) {
+            req.flash("error", "Github 이메일이 정상적이지 않습니다. 다시 시도해주세요.");
             return res.redirect("/login");
         }
         console.log(emailOBj);
@@ -165,17 +166,27 @@ export const postEdit = async (req, res) => {
         body: {name, email, username, location},
     } = req;
     
-    
-    const exists = await User.exists({$or: [{username}, {email}]});
-
-    if(exists) {
-        return res.status(400).render("edit-profile", {
-                pageTitle:"Update Profile", 
-                errorMessage:"Check Username or Email. already have an Username or Email."
-            } 
-        )
+    if(req.session.user.email !== email) {
+        const existEqualEmail = await User.findOne({email});
+        if(existEqualEmail) {
+            return res.status(400).render("edit-profile", {
+                    pageTitle:"Edit Profile", 
+                    errorMessage:"Check Email. already have an Same Email."
+                } 
+            )
+        }
     }
-    
+
+    if(req.session.user.username !== username) {
+        const existEqualUsername = await User.findOne({username});
+        if(existEqualUsername) {
+            return res.status(400).render("edit-profile", {
+                    pageTitle:"Edit Profile", 
+                    errorMessage:"Check Username. already have an Same Username."
+                } 
+            )
+        }
+    }
 
     const updatedUser = await User.findByIdAndUpdate(_id, {name, email, username, location}, {new:true});
     
