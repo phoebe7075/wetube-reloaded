@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
     res.locals.loggedIn = Boolean(req.session.loggedIn);
     res.locals.siteName="Wetube";
@@ -26,3 +28,7 @@ export const flashMiddleware = (req, res, next) => {
     res.locals.messages = req.flash(); // req.flash()는 { success: [...], error: [...] } 형태의 객체를 반환
     next();
 }
+
+export const uploadFiles = multer({
+    dest: "uploads/"
+})
