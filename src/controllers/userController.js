@@ -209,14 +209,13 @@ export const postChangePassword = async (req, res) => {
         },
         body: {oldPassword, newPassword, newPassword2},
     } = req;
-    console.log(password);
-    console.log(await bcrypt.hash(oldPassword, 5));
+
     const checkPassword = await bcrypt.compare(oldPassword, password);
 
     if(!checkPassword) {
         return res.status(400).render("users/change-password", {
             pageTitle:"Change Password", 
-            errMsg:"Old Password not correct. Please Retry.",
+            errorMessage:"Old Password not correct. Please Retry.",
         });
     }
 
@@ -232,16 +231,17 @@ export const postChangePassword = async (req, res) => {
         return res.status(400).render("users/change-password", {
                 pageTitle:"Change Password", 
                 errorMessage:"Old Password and New Password is same. Please Use another Password."
-            } 
+            }
         );
     }
+    
+    const user = await User.findById(_id);
+    user.password = newPassword;
+    await user.save();
+    req.session.user.password = user.password;
 
-    
 
-    
-    await User.findByIdAndUpdate(_id, {newPassword});
-    
-    return res.redirect("/");
+    return res.redirect("/users/logout");
 }
 
 export const see = (req, res) => res.send("See User");
