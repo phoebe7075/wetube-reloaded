@@ -15,10 +15,6 @@ userSchema.pre('save', async function() {
     this.password = await bcrypt.hash(this.password, 5);
 })
 
-userSchema.pre('findOneAndUpdate', async function() {
-    this.password = await bcrypt.hash(this.password, 5);
-})
-
 const User = mongoose.model('User', userSchema);
 
 export default User;
