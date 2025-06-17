@@ -1,5 +1,5 @@
 import express from "express";
-import { getEdit, remove, see, logout, startGithubLogin, finishGithubLogin, postEdit, getChangePassword, postChangePassword } from "../controllers/userController";
+import { getEdit, see, logout, startGithubLogin, finishGithubLogin, postEdit, getChangePassword, postChangePassword } from "../controllers/userController";
 import { avatarUpload, protectorMiddleware, publicOnlyMiddleware,  } from "../middlewares";
 
 
@@ -10,7 +10,7 @@ userRouter.get("/logout", protectorMiddleware ,logout);
 userRouter.route("/github/start").get(publicOnlyMiddleware, startGithubLogin);
 userRouter.route("/github/finish").get(publicOnlyMiddleware, finishGithubLogin);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
-userRouter.get("/:id(\\d+)", see);
+userRouter.get("/:id", see);
 
 
 
