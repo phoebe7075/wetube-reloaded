@@ -13,12 +13,12 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
     const { id } = req.params;
     
-    const videoItem = await Video.findById(id);
-    const owner = await User.findById(videoItem.owner);
+    const videoItem = await Video.findById(id).populate("owner");
+    //const owner = videoItem.owner;
     if(!videoItem) {
         return res.status(404).render("404", {pageTitle : "Video not found"});
     }
-    return res.render("watch", {pageTitle : videoItem.title, video: videoItem, owner});
+    return res.render("watch", {pageTitle : videoItem.title, video: videoItem});
     
 };
 export const getEdit = async (req, res) => {
@@ -58,13 +58,18 @@ export const postUpload = async (req, res) => {
     const { title, description, hashtags } = req.body
 
     try {
-        await Video.create({
+        const newVideo = await Video.create({
             title,
             description,
             fileUrl: file.path,
             owner:_id,
             hashtags: Video.formatHashtags(hashtags),
         });
+
+        const user = await User.findById(_id);
+        user.videos.push(newVideo._id);
+        user.save();
+        req.session.user = user;
         return res.redirect("/")
     } catch(err) {
         return res.status(400).render("upload", {

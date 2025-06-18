@@ -10,7 +10,7 @@ userRouter.get("/logout", protectorMiddleware ,logout);
 userRouter.route("/github/start").get(publicOnlyMiddleware, startGithubLogin);
 userRouter.route("/github/finish").get(publicOnlyMiddleware, finishGithubLogin);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
-userRouter.get("/:id", see);
+userRouter.get("/:id([0-9a-f]{24})", see);
 
 
 
