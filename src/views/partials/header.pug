@@ -1,8 +1,11 @@
 header 
-    a(href="/") 
+    a(href="/").header__logo
         i.fab.fa-youtube
     nav 
         ul 
+            li 
+                a(href="/search") 
+                    i.fas.fa-search
             if loggedIn
                 li 
                     a(href="videos/upload") Upload Video
@@ -18,6 +21,5 @@ header
                 li 
                     a(href="/login") LogIn
                 li 
-                    a(href="/join") Join
-            li 
-                a(href="/search") Search
+                    a(href="/join").header__btn Join
+            

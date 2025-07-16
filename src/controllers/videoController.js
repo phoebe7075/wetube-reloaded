@@ -3,7 +3,7 @@ import User from "../models/User";
 
 export const home = async (req, res) => {
     try {
-        const videos = await Video.find({}).sort({createdAt:"desc"}); //db에서 결과를 받을때까지 대기
+        const videos = await Video.find({}).sort({createdAt:"desc"}).populate("owner"); //db에서 결과를 받을때까지 대기
         return res.render("home", {pageTitle : "Home", videos});
     } catch {
         return res.render("server-error");
