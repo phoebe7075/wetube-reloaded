@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev:server": "nodemon",
-    "dev:assets": "webpack --config webpack.config.js"
+    "dev:assets": "webpack"
   },
   "author": "phoebe7075",
   "license": "MIT",
