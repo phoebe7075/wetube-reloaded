@@ -1,5 +1,10 @@
 # Wetube Reloaded
 
+## 실행
+
+- server : npm run dev:server
+- assets : npm run dev:assets
+
 - / : Home
 
 - /join : Join
