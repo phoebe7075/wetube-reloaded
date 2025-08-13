@@ -38,13 +38,24 @@ const handlevolumeChange = (event) => {
     video.volume = value;
 }
 
-const handleLoadedMetadata = () => {
-    totalTime.innerText = Math.floor(video.duration);
-    
+const formatTime = (seconds) => {
+    if(seconds >= 3600) {
+        return new Date(Math.floor(seconds*1000)).toISOString().substring(11,19);
+    } else {
+        return new Date(Math.floor(seconds*1000)).toISOString().substring(14,19);
+    }
 }
 
+const handleLoadedMetadata = () => {
+    const videolength = video.duration;
+
+    totalTime.innerText = formatTime(videolength);
+}
+
+
 const handleTimeUpdate = () => {
-    currentTime.innerText = Math.floor(video.currentTime);
+    const cTime = video.currentTime;
+    currentTime.innerText = formatTime(cTime);
 }
 
 playBtn.addEventListener("click", handlePlayBtn);
