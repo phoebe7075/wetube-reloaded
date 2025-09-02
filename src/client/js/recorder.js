@@ -3,10 +3,18 @@ const video = document.getElementById("preview");
 
 let stream;
 
+let recorder;
+
+const handleDownload = () => {
+    startBtn.innerText = "Download Recording";
+}
+
 const handleStop = () => {
     startBtn.innerText = "Start Recording";
     startBtn.removeEventListener("click", handleStop);
-    startBtn.addEventListener("click", handleStart);
+    startBtn.addEventListener("click", handleDownload);
+
+    recorder.stop();
 }
 
 const handleStart = () => {
@@ -14,18 +22,15 @@ const handleStart = () => {
     startBtn.removeEventListener("click", handleStart);
     startBtn.addEventListener("click", handleStop);
 
-    const recorder = new MediaRecorder(stream);
+    recorder = new MediaRecorder(stream);
     recorder.ondataavailable = (e) => {
-        console.log("recorder");
-        console.log(e);
-        console.log(e.data);
+        const videoFile = URL.createObjectURL(e.data); //브라우저 내의 메모리를 가리키는 URL.
+        video.srcObject = null;
+        video.src = videoFile;
+        video.loop = true;
+        video.play();
     }
     recorder.start();
-
-    setTimeout(() => {
-        recorder.stop();
-        handleStop();
-    }, 10000);
 }
 
 const init = async () => {
@@ -36,9 +41,6 @@ const init = async () => {
             height: 100,
         },
     });
-
-    video.srcObject = stream;
-    video.play();
 }
 
 init();
