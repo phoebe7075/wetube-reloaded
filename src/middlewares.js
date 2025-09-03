@@ -12,6 +12,7 @@ export const protectorMiddleware = (req, res, next) => {
     if(req.session.loggedIn) {
         return next();
     } else {
+        req.flash("error", "Not authorized");
         return res.redirect("/login");
     }
 }
@@ -20,13 +21,9 @@ export const publicOnlyMiddleware = (req, res, next) => {
     if(!req.session.loggedIn) {
         return next();
     } else {
+        req.flash("error", "Not authorized");
         return res.redirect("/");
     }
-}
-
-export const flashMiddleware = (req, res, next) => {
-    res.locals.messages = req.flash(); // req.flash()는 { success: [...], error: [...] } 형태의 객체를 반환
-    next();
 }
 
 export const avatarUpload = multer({

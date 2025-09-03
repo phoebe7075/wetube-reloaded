@@ -4,12 +4,12 @@ import express from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import flash from "connect-flash";
+import flash from "express-flash";
 
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
-import { flashMiddleware, localsMiddleware } from "./middlewares";
+import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
 
 
@@ -29,9 +29,7 @@ app.use(session({
 }));
 
 app.use(flash());
-
 app.use(localsMiddleware);
-app.use(flashMiddleware);
 
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));

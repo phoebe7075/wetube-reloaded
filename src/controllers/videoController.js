@@ -29,6 +29,7 @@ export const getEdit = async (req, res) => {
         return res.status(404).render("404", {pageTitle : "Video not found"});
     }
     if(String(videoItem.owner) !== String(_id)) {
+        req.flash("error", "Not authorized");
         return res.status(403).redirect("/");
     }
     return res.render("edit", {pageTitle : `Edit : ${videoItem.title}`, video: videoItem});
@@ -44,6 +45,7 @@ export const postEdit = async (req, res) => {
         return res.status(404).render("404", {pageTitle : "Video not found"});
     }
     if(String(videoItem.owner) !== String(_id)) {
+        req.flash("error", "비디오의 소유자가 아닙니다.");
         return res.status(403).redirect("/");
     }
     await Video.findByIdAndUpdate(id, {
@@ -62,7 +64,6 @@ export const getUpload= (req, res) => {
 export const postUpload = async (req, res) => {
     const {user: {_id},} = req.session;
     const { video, thumb } = req.files;
-    console.log(video, thumb);
 
     const { title, description, hashtags } = req.body
 
