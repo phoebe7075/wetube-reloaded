@@ -19,18 +19,31 @@ const handleDownload = async () => {
     ffmpeg.writeFile("recording.webm", await fetchFile(videoFile)); //브라우저 상의 ffmpeg 가상 환경에서 파일 생성
     
     await ffmpeg.exec(["-i", "recording.webm", "-r", "60", "output.mp4"]); // webm -> mp4 컨버트
+    await ffmpeg.exec(["-i", "recording.webm", "-ss", "00:00:01", "-frames:v", "1", "thumbnail.jpg"]);
 
-    const data = await ffmpeg.readFile('output.mp4');
-    const blob = new Blob([data.buffer], { type: "video/mp4" });
-    const url = URL.createObjectURL(blob);
-    videoFile = url;
+    const videoData = await ffmpeg.readFile('output.mp4');
+    const thumbFile = await ffmpeg.readFile("thumbnail.jpg");
+
+    const videoBlob = new Blob([videoData.buffer], { type: "video/mp4" });
+    const thumbBlob = new Blob([thumbFile.buffer], {type: "image/jpg"});
+
+    const videoUrl = URL.createObjectURL(videoBlob);
+    const thumbUrl = URL.createObjectURL(thumbBlob);
+
+    videoFile = videoUrl;
 
 
     const a = document.createElement("a");
     a.href = videoFile;
-    a.download = "MyRecording.webm";
+    a.download = "MyRecording";
     document.body.appendChild(a);
     a.click();
+
+    const thumbA = document.createElement("a");
+    thumbA.href = thumbUrl;
+    thumbA.download = "Thumbnail.jpg";
+    document.body.appendChild(thumbA);
+    thumbA.click();
 }
 
 const handleStop = () => {
