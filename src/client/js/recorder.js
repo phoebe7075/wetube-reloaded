@@ -1,14 +1,35 @@
 import { createFFmpeg, FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
 
-const startBtn = document.getElementById("startBtn");
+const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
 let recorder;
 let videoFile;
 
+const files = {
+    input: "recording.webm",
+    output: "output.mp4",
+    thumb: "thumbnail.jpg",
+}
+
+const downloadFile = (fileUrl, fileName) => {
+    
+    const a = document.createElement("a");
+    a.href = fileUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+}
+
 const handleDownload = async () => {
+    actionBtn.removeEventListener("click", handleDownload);
+
+    actionBtn.innerText = "Transcoding...";
+
+    actionBtn.disabled = true;
+
     const ffmpeg = new FFmpeg();
     await ffmpeg.load({
     corePath: '/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.js',
@@ -16,13 +37,13 @@ const handleDownload = async () => {
     ffmpeg.on('log', ({message})=>console.log(message));
 
 
-    ffmpeg.writeFile("recording.webm", await fetchFile(videoFile)); //브라우저 상의 ffmpeg 가상 환경에서 파일 생성
+    ffmpeg.writeFile(files.input, await fetchFile(videoFile)); //브라우저 상의 ffmpeg 가상 환경에서 파일 생성
     
-    await ffmpeg.exec(["-i", "recording.webm", "-r", "60", "output.mp4"]); // webm -> mp4 컨버트
-    await ffmpeg.exec(["-i", "recording.webm", "-ss", "00:00:01", "-frames:v", "1", "thumbnail.jpg"]);
+    await ffmpeg.exec(["-i", files.input, "-r", "60", files.output]); // webm -> mp4 컨버트
+    await ffmpeg.exec(["-i", files.input, "-ss", "00:00:01", "-frames:v", "1", files.thumb]);
 
-    const videoData = await ffmpeg.readFile('output.mp4');
-    const thumbFile = await ffmpeg.readFile("thumbnail.jpg");
+    const videoData = await ffmpeg.readFile(files.output);
+    const thumbFile = await ffmpeg.readFile(files.thumb);
 
     const videoBlob = new Blob([videoData.buffer], { type: "video/mp4" });
     const thumbBlob = new Blob([thumbFile.buffer], {type: "image/jpg"});
@@ -33,35 +54,23 @@ const handleDownload = async () => {
     videoFile = videoUrl;
 
 
-    const a = document.createElement("a");
-    a.href = videoFile;
-    a.download = "MyRecording";
-    document.body.appendChild(a);
-    a.click();
+    downloadFile(videoFile, "MyRecording.mp4");
+    downloadFile(thumbUrl, "Thumbnail.jpg");
 
-    const thumbA = document.createElement("a");
-    thumbA.href = thumbUrl;
-    thumbA.download = "Thumbnail.jpg";
-    document.body.appendChild(thumbA);
-    thumbA.click();
+    ffmpeg.unlink(files.input);
+    ffmpeg.unlink(files.output);
+    ffmpeg.unlink(files.thumb);
 
-    ffmpeg.unlink("recording.webm");
-    ffmpeg.unlink("output.mp4");
-    ffmpeg.unlink("thumbnail.jpg");
-}
-
-const handleStop = () => {
-    startBtn.innerText = "Download Recording";
-    startBtn.removeEventListener("click", handleStop);
-    startBtn.addEventListener("click", handleDownload);
-
-    recorder.stop();
+    actionBtn.disabled = false;
+    actionBtn.innerText = "Recording again";
+    actionBtn.addEventListener("click", handleStart);
 }
 
 const handleStart = () => {
-    startBtn.innerText = "Stop Recording";
-    startBtn.removeEventListener("click", handleStart);
-    startBtn.addEventListener("click", handleStop);
+    actionBtn.innerText = "Recording";
+    actionBtn.disabled = true;
+    actionBtn.removeEventListener("click", handleStart);
+
 
     recorder = new MediaRecorder(stream);
     recorder.ondataavailable = (e) => {
@@ -70,20 +79,28 @@ const handleStart = () => {
         video.src = videoFile;
         video.loop = true;
         video.play();
+        actionBtn.innerText = "Download";
+        actionBtn.disabled = false;
+        actionBtn.addEventListener("click", handleDownload);
     }
     recorder.start();
+    setTimeout(()=>{
+        recorder.stop();
+    }, 5000);
 }
 
 const init = async () => {
     stream = await navigator.mediaDevices.getUserMedia({
         audio: false, 
         video: {
-            width: 200,
-            height: 100,
+            width: 1024,
+            height: 576,
         },
     });
+    video.srcObject = stream;
+    video.play();
 }
 
 init();
 
-startBtn.addEventListener("click", handleStart);
+actionBtn.addEventListener("click", handleStart);
