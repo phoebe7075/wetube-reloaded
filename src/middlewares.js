@@ -12,7 +12,7 @@ export const protectorMiddleware = (req, res, next) => {
     if(req.session.loggedIn) {
         return next();
     } else {
-        req.flash("error", "Not authorized");
+        req.flash("error", "로그인이 필요합니다.");
         return res.redirect("/login");
     }
 }
