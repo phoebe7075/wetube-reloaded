@@ -158,5 +158,30 @@ export const createComment = async (req, res) => {
     video.comments.push(comment._id);
     video.save();
     
-    return res.sendStatus(201);
+    return res.status(201).json({newCommentId: comment._id});
+}
+
+export const deleteComment = async (req, res) => {
+    const {id} = req.params;
+    const {_id} = req.session.user;
+
+    const commentItem = await Comment.findById(id);
+    if(!commentItem) {
+        req.flash("failed", "Comment not found.");
+        return res.sendStatus(404);
+    }
+
+    if (String(commentItem.owner) !== String(_id)) {
+        return res.status(403).send("You are not the owner of the comment.");
+    }
+    await Video.findByIdAndUpdate(commentItem.video, {
+        $pull: {
+            comments: id,
+        },
+    });
+    console.log(commentItem);
+    await Comment.findByIdAndDelete(id);
+
+    req.flash("success", "Comment delete Success!!");
+    return res.sendStatus(200);
 }

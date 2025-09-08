@@ -27,10 +27,20 @@
   margin: 0 auto;
   margin-top: 20px;
   .video__comment {
+    display: flex;        
+    align-items: center; 
     padding: 10px;
     border-radius: 10px;
     background-color:white;
     color: black;
     margin-bottom: 10px;
+    .comment__text {
+      margin-left: 10px;
+    }
+    .comment__delete {
+      margin-left: auto;
+      background: none;
+      cursor: pointer;
+    }
   }
 }
