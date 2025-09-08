@@ -16,7 +16,7 @@ export const watch = async (req, res) => {
     
     const videoItem = await Video.findById(id).populate("owner").populate("comments");
 
-    console.log(videoItem);
+    //console.log(videoItem);
     //const owner = videoItem.owner;
     if(!videoItem) {
         return res.status(404).render("404", {pageTitle : "Video not found"});
@@ -130,7 +130,7 @@ export const registerView = async (req, res) => {
     }
 
     video.meta.views = video.meta.views+1;
-    console.log(video.meta.views);
+    //console.log(video.meta.views);
     await video.save();
 
     return res.sendStatus(200);

@@ -120,7 +120,7 @@ export const finishGithubLogin = async (req, res) => {
             req.flash("error", "Github 이메일이 정상적이지 않습니다. 다시 시도해주세요.");
             return res.redirect("/login");
         }
-        console.log(emailOBj);
+        
         let user = await User.findOne({email: emailOBj.email});
 
         const existingUserByUsername = await User.findOne({ username: userData.login });
