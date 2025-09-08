@@ -67,7 +67,7 @@ const handleCommentDelete = async ( event ) => {
 
     const confirmation = confirm("댓글을 삭제하시겠습니까?");
 
-    if(!confirm) {
+    if(!confirmation) {
         return;
     }
 
