@@ -166,12 +166,13 @@ export const deleteComment = async (req, res) => {
     const {_id} = req.session.user;
 
     const commentItem = await Comment.findById(id);
+    const videoItem = await Video.findById(commentItem.video);
     if(!commentItem) {
         req.flash("failed", "Comment not found.");
         return res.sendStatus(404);
     }
 
-    if (String(commentItem.owner) !== String(_id)) {
+    if (String(commentItem.owner) !== String(_id) && String(videoItem.owner) !== String(_id)) {
         return res.status(403).send("You are not the owner of the comment.");
     }
     await Video.findByIdAndUpdate(commentItem.video, {
